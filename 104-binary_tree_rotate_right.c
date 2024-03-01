@@ -1,20 +1,37 @@
 #include "binary_trees.h"
+
 /**
- * binary_tree_preorder - print elements of tree using pre-order traversal
- * @tree: tree to go through
- * @func: function to use
- * Return: Nothing
+ * binary_tree_rotate_right - Function that  rotates right the binary tree.
+ * @tree: The root node of the three
+ * Return: Pointer node of the new node
  */
-void binary_tree_preorder(const binary_tree_t *tree, void (*func)(int))
+binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 {
-	if (tree == NULL || func == NULL)
+	binary_tree_t *p;
+
+	if (tree == NULL || tree->left == NULL)
 	{
-		return;
+		return (tree);
 	}
-	else
+	p = tree->left;
+	tree->left = p->right;
+	if (p->right != NULL)
 	{
-		func(tree->n);
-		binary_tree_preorder(tree->left, func);
-		binary_tree_preorder(tree->right, func);
+		p->right->parent = tree;
 	}
+	p->parent = tree->parent;
+	if (tree->parent != NULL)
+	{
+		if (tree->parent->left == tree)
+		{
+			tree->parent->left = p;
+		}
+		else
+		{
+			tree->parent->right = p;
+		}
+	}
+	p->right = tree;
+	tree->parent = p;
+	return (p);
 }
